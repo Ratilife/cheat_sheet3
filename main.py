@@ -1,11 +1,13 @@
+import subprocess
+def start():
+    subprocess.run(
+        ["python", r"F:\Языки\Python\Partfolio\cheat_sheet3\srs\ui\side_panel.py"])
 
-def print_hi(name):
 
-    print(f'Hi, {name}')
 
 
 
 if __name__ == '__main__':
-    print_hi('PyCharm')
+    start()
 
 
