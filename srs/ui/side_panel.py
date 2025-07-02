@@ -38,12 +38,14 @@ class SidePanel(QWidget):
         # TODO проконтролровать, как спользуется
         self.tree_model_manager.delete_manager.removal_complete.connect(self._handle_removal_result)
 
-        self.file_operations = FileOperations()
+
 
         # 3. # Инициализация наблюдателя
         self.file_watcher = FileWatcher()
         self.file_watcher.file_updated.connect(self._on_file_updated)
         self.file_watcher.file_deleted.connect(self._on_file_deleted)
+
+        self.file_operations = FileOperations(self.tree_model_manager,self.file_watcher)
 
         # нижняя панель (отображение данных)
         self.content_viewer = MarkdownViewer()
@@ -83,7 +85,7 @@ class SidePanel(QWidget):
         self.toolbar_manager.set_tree_model(self.tree_model_manager)
 
         self.context_menu_handler = ContextMenuHandler(
-            tree_view=self.tree_view,
+           tree_view=self.tree_view,
             delete_manager=self.tree_model_manager.delete_manager
         )
         # Подключение контекстного меню к tree_view
@@ -115,7 +117,7 @@ class SidePanel(QWidget):
         self.tree_view.setItemDelegate(self.delegate)
 
         # Подключаем обработчик двойного клика
-        # self.tree_view.doubleClicked.connect(self._on_tree_item_double_clicked)
+        self.tree_view.doubleClicked.connect(self._on_tree_item_double_clicked) #TODO ?
         self.tree_manager.setup_double_click_handler(self)
 
         # Настройка стиля дерева
@@ -212,9 +214,9 @@ class SidePanel(QWidget):
         >>> self._handle_removal_result(False, "Не удалось удалить файл")
         # Покажет предупреждающее окно
     """
-        # TODO 🚧 В разработке: 30.06.2025 (нужно правльно сформулировать строку self.tree_model_manager.file_manager.save_files_to_json())
+        # ✅ Реализовано: 02.07.2025
         if success:
-            self.tree_model_manager.file_manager.save_files_to_json()
+            self.file_operations.file_manager.save_files_to_json()
             QMessageBox.information(self, "Успех", message)
         else:
             QMessageBox.warning(self, "Ошибка", message)
@@ -321,7 +323,7 @@ class SidePanel(QWidget):
             # TODO определить переменную self.toolbar_manager
             self.editor_window = FileEditorWindow(self.tree_model_manager, self.toolbar_manager)
             # Подключаем сигналы редактора к панели
-            #self.editor_window.observer.file_created.connect(self._on_file_created)
+            self.editor_window.observer.file_created.connect(self._on_file_created)
         self.editor_window.show()
 
     def _on_tree_item_clicked(self, index):
@@ -401,7 +403,7 @@ class SidePanel(QWidget):
         # Устанавливаем политику контекстного меню
         self.setContextMenuPolicy(Qt.CustomContextMenu)
         # Подключаем обработчик показа контекстного меню
-        self.customContextMenuRequested.connect(self.show_context_menu)
+        #self.customContextMenuRequested.connect(self.show_context_menu)
 
     # Метод для закрепления панели слева
     def _dock_to_left(self):

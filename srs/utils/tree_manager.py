@@ -3,8 +3,8 @@ from PySide6.QtCore import (QModelIndex)
 from typing import Union, TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from preparation.editor2.ui.file_editor import FileEditorWindow  # Для аннотаций
-    from preparation.editor2.ui.side_panel import SidePanel
+    from srs.ui.file_editor import FileEditorWindow  # Для аннотаций
+    from srs.ui.side_panel import SidePanel
 class TreeManager:
     """
         Класс для управления деревом (разворачиванием/сворачиванием узлов).
