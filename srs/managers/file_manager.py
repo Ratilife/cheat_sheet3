@@ -7,9 +7,10 @@ class FileManager:
     def __init__(self):
         # TODO 🚧 В разработке: 02.07.2025
         self.tree_model = None
-        self.st_parser = STFileParserWrapper()
-        self.md_parser = MarkdownListener()
+        self.st_parser = STFileParserWrapper() #TODO нарушает принцип построение модуля
+        self.md_parser = MarkdownListener()    #TODO нарушает принцип построение модуля 
 
+    #TODO найти модуль куда перенести метод
     def parse_and_get_type(self, file_path: str) -> tuple[str, dict]:
         """Определяет тип файла и парсит его содержимое"""
         # ✅ Реализовано: 02.07.2025
