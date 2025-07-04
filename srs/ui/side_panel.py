@@ -54,7 +54,7 @@ class SidePanel(QWidget):
         self._init_ui()
 
         # Подключение сигнала
-        # TODO проконтролровать, как спользуется
+        # TODO проконтролровать, как используется
         self.toolbar_manager.editor_toggled.connect(self._open_editor)
 
         # Инициализация контекстного меню для управления позицией

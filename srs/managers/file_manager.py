@@ -10,13 +10,14 @@ class FileManager:
         self.st_parser = STFileParserWrapper() #TODO нарушает принцип построение модуля
         self.md_parser = MarkdownListener()    #TODO нарушает принцип построение модуля 
 
-    #TODO найти модуль куда перенести метод
+    #TODO найти модуль куда перенести метод перенести в класс STFileParserWrapper модуля st_file_parser.py
     def parse_and_get_type(self, file_path: str) -> tuple[str, dict]:
         """Определяет тип файла и парсит его содержимое"""
-        # ✅ Реализовано: 02.07.2025
+        # TODO 🚧 В разработке: 04.07.2025 st_parser и md_parser нарушает принцип построение модуля
         if file_path.endswith('.st'):
             return "file", self.st_parser.parse_st_file(file_path)
         elif file_path.endswith('.md'):
+            # парсинг md находится в другом модуле
             return "markdown", self.md_parser.parse_markdown_file(file_path)
         raise ValueError("Unsupported file type")
 
@@ -73,3 +74,5 @@ class FileManager:
         # Сохраняем в JSON
         with open(save_path, 'w', encoding='utf-8') as f:
             json.dump(files, f, ensure_ascii=False, indent=4)
+
+

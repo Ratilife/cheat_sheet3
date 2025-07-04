@@ -17,9 +17,9 @@ import os
 # Импорт компонентов ANTLR
 from antlr4 import FileStream, CommonTokenStream, ParseTreeWalker
 from antlr4.error.ErrorListener import ErrorListener
-from preparation.editor.ANTLR4.st_Files.STFileLexer import STFileLexer
-from preparation.editor.ANTLR4.st_Files.STFileParser import STFileParser
-from preparation.editor.ANTLR4.st_Files.STFileListener import STFileListener
+from srs.ANTLR4.STFileLexer import STFileLexer
+from srs.ANTLR4.STFileParser import STFileParser
+from srs.ANTLR4.STFileListener import STFileListener
 # ===================================================================
 # КЛАССЫ ДЛЯ ПАРСИНГА ST-ФАЙЛОВ
 # ===================================================================
@@ -157,6 +157,13 @@ class STFileParserWrapper:
         except Exception as e:
             raise IOError(f"Ошибка сохранения файла: {str(e)}")
 
+    def parse_and_get_type(self, file_path: str) -> tuple[str, dict]:
+        # TODO 🚧 В разработке: 04.07.2025 определится нужен сдесь этот метод
+        if file_path.endswith('.st'):
+            return "file", self.parse_st_file(file_path)
+        elif file_path.endswith('.md'):
+            raise ValueError("MD files are not supported by this parser")
+        raise ValueError("Unsupported file type")
 
     def _generate_st_content(self, structure):
         """
