@@ -11,7 +11,7 @@ class FileOperations:
 
     def add_file_to_tree(self, file_path: str) -> bool:
         """Полный процесс добавления файла"""
-        # TODO 🚧 В разработке: 02.07.2025
+        # TODO 🚧 В разработке: 05.07.2025 нужность метода под вопросом
         try:
             item_type, parsed_data = self.file_manager.parse_and_get_type(file_path)
             return self.tree_manager.add_item(item_type, file_path) #TODO ?
@@ -31,14 +31,16 @@ class FileOperations:
                 # TODO - tree_manager.add_item("file", path) какой тп элемента создает, нужно передать
                 self.tree_manager.add_item("file", path)
                 # Обновление состояния
-                self.file_watcher.set_current_file(path)
+                self.file_watcher.set_current_file(path)  #TODO метод нужно создать
+                # TODO функционал(Сигнал) наблюдателя observer не описан
+                # TODO Реализовать загрузку данных ново созданного файла в редактор
                 return True, f"Файл {os.path.basename(path)} создан"
         except Exception as e:
             return False, str(e)
 
     def create_and_add_md_file(self) -> tuple[bool, str]:
         """Полный цикл создания MD-файлов"""
-        # ✅ Реализовано: 02.07.2025
+        # TODO 🚧 В разработке: 02.07.2025
         path = self.file_manager.get_save_path("Создать MD файл", "Markdown Files (*.md)")
         if not path:
             return False, "Отменено пользователем"
@@ -46,7 +48,13 @@ class FileOperations:
             if self.file_manager.create_md_file(path):
                 self.tree_manager.add_item("markdown", path)
                 # Обновление состояния
-                self.file_watcher.set_current_file(path)
+                self.file_watcher.set_current_file(path)   #TODO метод нужно создать
+                # Отправляем сигнал о создании файла
+                # TODO функционал(Сигнал) наблюдателя observer не описан
+                # TODO Реализовать загрузку данных ново созданного файла в редактор
                 return True, f"Файл {os.path.basename(path)} создан"
         except Exception as e:
             return False, str(e)
+
+    def load_st_md_files(self):
+        pass

@@ -34,9 +34,9 @@ class SidePanel(QWidget):
         self.observer = SidePanelObserver()
         # 2.  Инициализация модели и менеджеров
         # TODO класс TreeModelManager() будет переписан и обращение к нему
-        self.tree_model_manager = TreeModelManager()  # Подключаем менеджер
+        #self.tree_model_manager = TreeModelManager()  # Подключаем менеджер
         # TODO проконтролровать, как спользуется
-        self.tree_model_manager.delete_manager.removal_complete.connect(self._handle_removal_result)
+        #self.tree_model_manager.delete_manager.removal_complete.connect(self._handle_removal_result)
 
 
 
@@ -45,7 +45,7 @@ class SidePanel(QWidget):
         self.file_watcher.file_updated.connect(self._on_file_updated)
         self.file_watcher.file_deleted.connect(self._on_file_deleted)
 
-        self.file_operations = FileOperations(self.tree_model_manager,self.file_watcher)
+        #self.file_operations = FileOperations(self.tree_model_manager,self.file_watcher)
 
         # нижняя панель (отображение данных)
         self.content_viewer = MarkdownViewer()
@@ -82,9 +82,9 @@ class SidePanel(QWidget):
         self.ui = UIManager()
         self.tree_manager = TreeManager(self.tree_view)
         self.toolbar_manager = ToolbarManager(self.tree_manager, self.close, self.showMinimized)
-        self.toolbar_manager.set_tree_model(self.tree_model_manager)
+        #self.toolbar_manager.set_tree_model(self.tree_model_manager)
 
-        self.context_menu_handler = ContextMenuHandler(
+        '''self.context_menu_handler = ContextMenuHandler(
            tree_view=self.tree_view,
             delete_manager=self.tree_model_manager.delete_manager
         )
@@ -93,7 +93,7 @@ class SidePanel(QWidget):
         self.tree_view.customContextMenuRequested.connect(
             self.context_menu_handler.show_tree_context_menu
         )
-
+        '''
         # Устанавливаем минимальную ширину панели
         self.setMinimumWidth(300)
 
@@ -117,7 +117,7 @@ class SidePanel(QWidget):
         self.tree_view.setItemDelegate(self.delegate)
 
         # Подключаем обработчик двойного клика
-        self.tree_view.doubleClicked.connect(self._on_tree_item_double_clicked) #TODO ?
+        #self.tree_view.doubleClicked.connect(self._on_tree_item_double_clicked) #TODO ?
         self.tree_manager.setup_double_click_handler(self)
 
         # Настройка стиля дерева

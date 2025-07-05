@@ -52,7 +52,7 @@ class FileManager:
         except Exception as e:
             raise Exception(f"Ошибка создания ST-файла: {str(e)}")
 
-    def _get_save_path(self):
+    def _get_save_path_json(self):
         """Возвращает путь к файлу сохранения"""
         # ✅ Реализовано: 02.07.2025
         return os.path.join(os.path.dirname(__file__), "saved_files.json")
