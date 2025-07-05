@@ -1,25 +1,14 @@
 import json
 import os
-from PySide6.QtWidgets import (QFileDialog, QMessageBox)
-from srs.parsers.st_file_parser import STFileParserWrapper
-from srs.parsers.md_file_parser import MarkdownListener
+from PySide6.QtWidgets import QFileDialog
+from srs.parsers.file_parser_service import FileParserService
 class FileManager:
-    def __init__(self):
+    def __init__(self, parser_service: FileParserService):
         # TODO 🚧 В разработке: 02.07.2025
         self.tree_model = None
-        self.st_parser = STFileParserWrapper() #TODO нарушает принцип построение модуля
-        self.md_parser = MarkdownListener()    #TODO нарушает принцип построение модуля 
+        self.parser_service = parser_service
 
-    #TODO найти модуль куда перенести метод перенести в класс STFileParserWrapper модуля st_file_parser.py
-    def parse_and_get_type(self, file_path: str) -> tuple[str, dict]:
-        """Определяет тип файла и парсит его содержимое"""
-        # TODO 🚧 В разработке: 04.07.2025 st_parser и md_parser нарушает принцип построение модуля
-        if file_path.endswith('.st'):
-            return "file", self.st_parser.parse_st_file(file_path)
-        elif file_path.endswith('.md'):
-            # парсинг md находится в другом модуле
-            return "markdown", self.md_parser.parse_markdown_file(file_path)
-        raise ValueError("Unsupported file type")
+
 
     @staticmethod
     def get_save_path(title: str, filter: str) -> str | None:
