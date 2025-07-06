@@ -1,6 +1,6 @@
 import json
 import os
-from PySide6.QtWidgets import QFileDialog
+from PySide6.QtWidgets import QFileDialog, QInputDialog
 from srs.parsers.file_parser_service import FileParserService
 class FileManager:
     def __init__(self, parser_service: FileParserService):
@@ -40,6 +40,26 @@ class FileManager:
             return True
         except Exception as e:
             raise Exception(f"Ошибка создания ST-файла: {str(e)}")
+
+    @staticmethod
+    def get_text_input(title: str, label: str, default_text: str = "") -> tuple[str, bool]:
+        """
+        Универсальный метод для получения текстового ввода от пользователя
+
+        Args:
+            title: Заголовок окна диалога
+            label: Текст подсказки
+            default_text: Текст по умолчанию
+
+        Returns:
+            tuple[введенный текст, успешно ли выполнено]
+        """
+        return QInputDialog.getText(
+            None,  # Родительское окно
+            title,
+            label,
+            text=default_text
+        )
 
     def _get_save_path_json(self):
         """Возвращает путь к файлу сохранения"""

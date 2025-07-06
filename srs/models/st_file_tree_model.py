@@ -17,6 +17,7 @@ class STFileTreeModel(QAbstractItemModel):
         self.parser = STFileParserWrapper()  # Обертка для парсера
         self.md_parser = MarkdownListener()  # Добавляем парсер для MD
         self.icon_provider = QFileIconProvider()  # Провайдер иконок
+        self.current_structure = None  # Для хранения структуры ST файла #TODO ?
 
     # Основные методы модели
     def index(self, row, column, parent=QModelIndex()):
@@ -152,6 +153,24 @@ class STFileTreeModel(QAbstractItemModel):
         # self.print_tree()
         print(f"Структура из парсера: {json.dumps(structure, indent=2)}")
 
+    def add_markdown_file(self, file_path):
+        """Добавляет Markdown файл в модель"""
+        #TODO переписать метод
+        result = self.md_parser.parse_markdown_file(file_path) # TODO изменить перенести в метод parse_and_get_type
+
+        self.beginInsertRows(QModelIndex(), self.rowCount(), self.rowCount())
+
+        # Создаем элемент для файла
+        file_item = STFileTreeItem([result['root_name'], "markdown", file_path], self.root_item)
+
+        # Строим структуру (для MD будет только один корневой элемент)
+        #self._build_tree(result['structure'], file_item)
+
+        self.root_item.child_items.append(file_item)
+        self.endInsertRows()
+
+    def add_folder(self, name: str, parent_index=None):
+        pass
     def _build_tree(self, nodes, parent):
         """
         Рекурсивно строит дерево элементов из переданных данных.
@@ -195,21 +214,7 @@ class STFileTreeModel(QAbstractItemModel):
         item = index.internalPointer()
         return item.type == "folder"
 
-    def add_markdown_file(self, file_path):
-        """Добавляет Markdown файл в модель"""
-        #TODO переписать метод
-        result = self.md_parser.parse_markdown_file(file_path) # TODO изменить перенести в метод parse_and_get_type
 
-        self.beginInsertRows(QModelIndex(), self.rowCount(), self.rowCount())
-
-        # Создаем элемент для файла
-        file_item = STFileTreeItem([result['root_name'], "markdown", file_path], self.root_item)
-
-        # Строим структуру (для MD будет только один корневой элемент)
-        #self._build_tree(result['structure'], file_item)
-
-        self.root_item.child_items.append(file_item)
-        self.endInsertRows()
 
     def has_children(self, parent=QModelIndex()):
         """
@@ -410,3 +415,4 @@ class STFileTreeModel(QAbstractItemModel):
             level += 1
             index = index.parent()
         return level
+

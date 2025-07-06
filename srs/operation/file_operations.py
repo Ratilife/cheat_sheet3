@@ -1,6 +1,7 @@
 import os
 from srs.managers.file_manager import FileManager
 from srs.utils.delete_manager import DeleteManager
+from srs.parsers.file_parser_service import FileParserService
 class FileOperations:
     def __init__(self,  tree_model_manager=None, file_watcher=None):
         self.file_manager = FileManager()
@@ -8,6 +9,7 @@ class FileOperations:
         self.file_watcher = file_watcher
         # TODO пока не определился с где будет находится менеджер удаления
         self.delete_manager = DeleteManager()
+        self.parser_service = FileParserService()
 
     def add_file_to_tree(self, file_path: str) -> bool:
         """
@@ -29,9 +31,9 @@ class FileOperations:
             Все исключения перехватываются, чтобы избежать прерывания выполнения программы при ошибках
             (например, если файл не найден или не может быть обработан).
         """
-        # TODO 🚧 В разработке: 05.07.2025 нужно переписать метод
+        # TODO 🚧 В разработке: 02.07.2025 нужно переписать метод
         try:
-            item_type, parsed_data = self.file_manager.parse_and_get_type(file_path)
+            item_type, parsed_data = self.parser_service.parse_and_get_type(file_path)
             return self.tree_manager.add_item(item_type, file_path) #TODO ?
         except Exception as e:
             print(f"Ошибка добавления файла: {str(e)}")
@@ -74,5 +76,20 @@ class FileOperations:
         except Exception as e:
             return False, str(e)
 
-    def load_st_md_files(self):
-        pass
+    def create_folder(self, parent_index=None) -> tuple[bool, str]:
+        """Создает папку через единый интерфейс добавления элементов"""
+        # ✅ Реализовано: 06.07.2025
+        name, ok = self.file_manager.get_text_input(
+            title="Создать папку",
+            label="Введите имя папки:"
+        )
+        if not ok:
+            return False, "Отменено"
+        if not name:
+            return False, "Имя папки не может быть пустым"
+
+        return self.tree_manager.add_item(
+            item_type="folder",
+            path=name,
+            parent_index=parent_index
+        ), f"Папка '{name}' создана"

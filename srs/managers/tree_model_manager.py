@@ -56,7 +56,10 @@ class TreeModelManager:
                 return self.tree_model.add_markdown_file(path)
             elif item_type == "folder":
                 # Реализация для папок
-                return self.tree_model.add_folder(path, parent_index)  # TODO сделать метод
+                success = self.tree_model.add_folder(path, parent_index) # TODO сделать метод
+                if success:
+                    self.file_manager.save_current_state() # TODO сделать метод
+                return success
             elif item_type == "template":
                 # Реализация для шаблонов
                 return self.tree_model.add_template(path, parent_index)  # TODO сделать метод
