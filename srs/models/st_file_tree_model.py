@@ -170,7 +170,10 @@ class STFileTreeModel(QAbstractItemModel):
         self.endInsertRows()
 
     def add_folder(self, name: str, parent_index=None):
-        pass
+        # Проверка условий для создания папки
+        if not self.current_file_path or not self.current_file_path.endswith('.st'):
+            return
+
     def _build_tree(self, nodes, parent):
         """
         Рекурсивно строит дерево элементов из переданных данных.
